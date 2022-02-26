@@ -70,13 +70,31 @@ namespace Pingeratorv3
 
         public double testDownload()
         {
-            double result = this.speedClient.TestDownloadSpeed(this.testServer, this.simultaneousUploads, this.retryCount);
+            double result = -1;
+            try
+            {
+                result = this.speedClient.TestDownloadSpeed(this.testServer, this.simultaneousUploads, this.retryCount);
+            }
+            catch (Exception E)
+            {
+                Console.WriteLine($"Something wacky happened while testing download speed: {E}");
+            }
+            Console.WriteLine($"The speed you got while testing the download was {result} kbps");
             return result;
         }
 
         public double testUpload()
         {
-            double result = this.speedClient.TestUploadSpeed(this.testServer, this.simultaneousUploads, this.retryCount);
+            double result = -1;
+            try
+            {
+                result = this.speedClient.TestUploadSpeed(this.testServer, this.simultaneousUploads, this.retryCount);
+            }
+            catch (Exception E)
+            {
+                Console.WriteLine($"Something wacky happened while testing upload speed: {E}");
+            }
+            Console.WriteLine($"The speed you got while testing the upload was {result} kbps");
             return result;
         }
 

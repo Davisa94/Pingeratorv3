@@ -4,6 +4,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Pingeratorv3
@@ -18,9 +19,10 @@ namespace Pingeratorv3
         public SQLiteConnection InitializeDatabase()
         {
             SQLiteConnection localConnection;
-            
-         if(!File.Exists("LocalDatabase.sqlite"))
+            FileInfo info = new FileInfo("LocalDatabase.sqlite");
+            if (!File.Exists("LocalDatabase.sqlite") || info.Length < 1)
          {
+                Console.WriteLine("Missing or corrupt Database, Remaking from scratch");
             this.initializeNewDatabase();
             localConnection = new SQLiteConnection("Data Source=LocalDatabase.sqlite;Version=3");
             this.myConnection = localConnection;
@@ -57,13 +59,13 @@ namespace Pingeratorv3
         ip_id = self.getIPID(host)
         sql = "INSERT INTO ping VALUES ('{}', {}, {})".format(curr_date_time, ping, ip_id[0])
         self.DBO.execute(sql)*/
-        public void testInsert()
+        /*public void testInsert()
         {
             string sql = "INSERT INTO `ping` (`datetime_tested`, `ping_value`, `ipv4_id`) VALUES (`2021-08-02 21:44:11`,24.42 ,1 )";
             this.myConnection.Open();
             SQLiteCommand testInsertCMD = new SQLiteCommand(sql, this.myConnection);
             testInsertCMD.ExecuteScalar();
-        }
+        }*/
         public void buildDatabase()
         {
             myConnection.Open();
@@ -85,6 +87,8 @@ namespace Pingeratorv3
             foreach (var insert in inserts)
             {
                 command = new SQLiteCommand(insert, this.myConnection);
+                command.ExecuteNonQuery();
+                Thread.Sleep(120);
             }
             myConnection.Close();
         }
@@ -95,7 +99,7 @@ namespace Pingeratorv3
             string unixTimeStamp = Convert.ToString((int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
             int ipId = getIpId(host);
             string sql = $"INSERT INTO ping (datetime_tested, ping_value, ipv4_id) VALUES ('{unixTimeStamp}',{ping} ,{ipId} )";
-            Console.WriteLine(sql);
+            //Console.WriteLine(sql);
             conn.Open();
             SQLiteCommand insertCommand = new SQLiteCommand(sql, conn);
             insertCommand.ExecuteNonQuery();
