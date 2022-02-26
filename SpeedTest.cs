@@ -32,14 +32,13 @@ namespace Pingeratorv3
 //         db_interactor.insertSpeed(st)
     class SpeedTest
     {
-        public Server testServer;
+        public Server testServer = new Server();
         public int retryCount;
         public int simultaneousUploads;
         public SpeedTestClient speedClient;
 
-        public SpeedTest(Server server, int retryCount=2,int simultaneousUploads=2)
+        public SpeedTest( int retryCount=2,int simultaneousUploads=2)
         {
-            this.testServer = server;
             this.retryCount = retryCount;
             this.simultaneousUploads = simultaneousUploads;
             initializeClient();

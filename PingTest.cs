@@ -45,7 +45,7 @@ class PingCloudFlare(Ping):
     class PingTest
     {
         public System.Net.IPAddress host;
-        public PingOptions options;
+        public PingOptions options = new PingOptions();
         public string data;
         public byte[] buffer;
         public int timeout;
@@ -57,6 +57,10 @@ class PingCloudFlare(Ping):
             this.timeout = timeout;
             this.buffer = Encoding.ASCII.GetBytes(data);
             this.options.DontFragment = true;
+        }
+        public void printResults(bool status, double rtt, System.Net.IPAddress host)
+        {
+            Console.WriteLine($"The ping @{host} returned {status} after {rtt}ms");
         }
         public long runPing()
         {
@@ -71,6 +75,7 @@ class PingCloudFlare(Ping):
                 if(reply.Status == IPStatus.Success)
                 {
                     roundTripTime = reply.RoundtripTime;
+                    printResults(reply.Status == IPStatus.Success, roundTripTime, this.host);
                 }
             }
             catch (Exception E)
