@@ -1,0 +1,63 @@
+Need: (what need does this app fulfill)
+We need to prove to our ISP that the speeds and 
+reliability that they are claiming to be providing 
+do not match what we are receiving.
+
+Purpose:
+This app will test both the ping times and the speeds of a network
+and collate that data into a databse.
+
+
+Design:
+The service:
+The service must reliably continue to run once run
+The service must reliably store the data to the database
+
+The Database:
+   Central Design:
+      iplookup Table:
+         ID
+         timeCreated
+         ipv4
+         domain name
+      clientlookup Table:
+         ID
+         LAN ipv4
+         computerName
+      Pings Table:
+         ID
+         ping_value
+         DateTime tested
+         ipv4_id
+         client_id
+      speed Table:
+         ID
+         datetime tested
+         raw downspeed_value
+         raw upspeed value
+         client_id
+      ===========================================
+      Local Design:
+      iplookup Table:
+         ID
+         timeCreated
+         ipv4
+         domain name
+      Pings Table:
+         ID
+         ping_value
+         DateTime tested
+         ipv4_id
+      speed Table:
+         ID
+         datetime tested
+         raw downspeed_value
+         raw upspeed value
+         
+The database may be run on a singular machine to accept data from multiple services
+   IF their is a central DB :
+      The central database must store the LAN IP of the device or another unuiqe identifier along with the data described in the DB Design
+      Their must be a backup local DB store incase the service is running standalone or cannot reach the main server.
+
+
+
